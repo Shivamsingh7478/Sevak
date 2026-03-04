@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SevakAI – Find Government Schemes for You</title>
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --saffron: #FF9933;
+    --saffron-dark: #e6871f;
+    --saffron-light: #fff4e8;
+    --green: #138808;
+    --green-dark: #0f6d06;
+    --green-light: #e8f5e9;
+    --navy: #0A2342;
+    --bg: #f5f6fa;
+    --card: #ffffff;
+    --text: #1a1a2e;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --shadow: 0 4px 24px rgba(10,35,66,0.08);
+    --radius: 14px;
+    --transition: all 0.22s cubic-bezier(.4,0,.2,1);
+  }
+  [data-theme="dark"] {
+    --bg: #0d1117;
+    --card: #161b22;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --border: #30363d;
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+    --saffron-light: #2a1a00;
+    --green-light: #0a1f0a;
+    --navy: #cdd9e5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: var(--transition);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ===== NAVBAR ===== */
+  .navbar {
+    position: sticky; top: 0; z-index: 1000;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    backdrop-filter: blur(12px);
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto;
+    padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 68px;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .logo-icon {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, var(--saffron), var(--green));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 22px;
+  }
+  .logo-text {
+    font-family: 'Mukta', sans-serif;
+    font-size: 1.4rem; font-weight: 800;
+    color: var(--text);
+  }
+  .logo-text span { color: var(--saffron); }
+  .nav-links {
+    display: flex; align-items: center; gap: 6px;
+    list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.9rem; font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 8px;
+    transition: var(--transition);
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--saffron); background: var(--saffron-light); }
+  .nav-right { display: flex; align-items: center; gap: 10px; }
+  .btn-theme {
+    background: none; border: 1.5px solid var(--border);
+    color: var(--text); border-radius: 8px; width: 38px; height: 38px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 18px; transition: var(--transition);
+  }
+  .btn-theme:hover { border-color: var(--saffron); color: var(--saffron); }
+  .btn-signin {
+    background: var(--saffron); color: white;
+    border: none; border-radius: 10px;
+    padding: 9px 20px; font-weight: 700; font-size: 0.9rem;
+    cursor: pointer; transition: var(--transition);
+    font-family: 'Mukta', sans-serif;
+  }
+  .btn-signin:hover { background: var(--saffron-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255,153,51,0.35); }
+  .hamburger {
+    display: none; background: none; border: none; cursor: pointer;
+    color: var(--text); font-size: 26px; padding: 4px;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: linear-gradient(135deg, #0a3d1f 0%, #1a5c10 30%, #8B4513 70%, #FF9933 100%);
+    position: relative; overflow: hidden;
+    padding: 80px 24px 60px;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='10'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  .hero-ashoka {
+    position: absolute; right: -60px; top: -60px;
+    width: 380px; height: 380px;
+    border: 3px solid rgba(255,255,255,0.05);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .hero-ashoka::after {
+    content: '☸';
+    font-size: 200px;
+    color: rgba(255,255,255,0.04);
+    line-height: 1;
+  }
+  .hero-content { max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 50px;
+    padding: 6px 16px; margin-bottom: 24px;
+    color: white; font-size: 0.82rem; font-weight: 600;
+  }
+  .hero h1 {
+    font-family: 'Mukta', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 800; color: white;
+    line-height: 1.15; margin-bottom: 16px;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  }
+  .hero h1 span { color: #FFD700; }
+  .hero-sub {
+    color: rgba(255,255,255,0.88);
+    font-size: 1.08rem; max-width: 580px;
+    margin-bottom: 40px; line-height: 1.7;
+  }
+
+  /* ===== SEARCH BOX ===== */
+  .search-card {
+    background: var(--card);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    display: flex; flex-wrap: wrap; gap: 14px;
+    align-items: flex-end;
+    max-width: 900px;
+  }
+  .search-field { flex: 1; min-width: 160px; }
+  .search-field label {
+    display: block; font-size: 0.8rem; font-weight: 700;
+    color: var(--text-muted); margin-bottom: 6px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .search-field select, .search-field input {
+    width: 100%; height: 48px;
+    background: var(--bg); border: 1.5px solid var(--border);
+    border-radius: 10px; padding: 0 14px;
+    color: var(--text); font-size: 0.95rem;
+    font-family: 'Noto Sans', sans-serif;
+    transition: var(--transition); outline: none;
+    appearance: none; -webkit-appearance: none;
+  }
+  .search-field select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236b7280'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; background-size: 20px; padding-right: 36px; }
+  .search-field select:focus, .search-field input:focus { border-color: var(--saffron); box-shadow: 0 0 0 3px rgba(255,153,51,0.15); }
+  .search-input-wrap { position: relative; }
+  .search-input-wrap .material-symbols-outlined { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 20px; pointer-events: none; }
+  .search-input-wrap input { padding-left: 40px; }
+  .btn-find {
+    height: 48px; min-width: 140px;
+    background: linear-gradient(135deg, var(--green), #1da010);
+    color: white; border: none; border-radius: 10px;
+    font-family: 'Mukta', sans-serif; font-size: 1rem; font-weight: 700;
+    cursor: pointer; transition: var(--transition);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 0 24px;
+  }
+  .btn-find:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(19,136,8,0.4); }
+  .btn-find .material-symbols-outlined { font-size: 20px; }
+
+  /* ===== STATS BAR ===== */
+  .stats-bar {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 24px;
+  }
+  .stats-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; justify-content: center; gap: 0; flex-wrap: wrap;
+  }
+  .stat-item {
+    text-align: center; padding: 8px 32px;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num { font-family: 'Mukta', sans-serif; font-size: 1.7rem; font-weight: 800; color: var(--saffron); line-height: 1; }
+  .stat-label { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.03em; }
+
+  /* ===== MAIN CONTENT ===== */
+  .main { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+  /* ===== SECTION ===== */
+  .section { padding: 56px 0; }
+  .section-header { margin-bottom: 32px; }
+  .section-header h2 { font-family: 'Mukta', sans-serif; font-size: 1.9rem; font-weight: 800; margin-bottom: 6px; }
+  .section-header p { color: var(--text-muted); font-size: 0.97rem; }
+  .section-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; }
+  .link-viewall { color: var(--saffron); font-weight: 700; font-size: 0.9rem; text-decoration: none; display: flex; align-items: center; gap: 4px; transition: var(--transition); }
+  .link-viewall:hover { gap: 8px; }
+
+  /* ===== CATEGORIES ===== */
+  .categories-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+  .cat-card {
+    background: var(--card); border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 22px 18px;
+    cursor: pointer; transition: var(--transition);
+    text-align: left; position: relative; overflow: hidden;
+  }
+  .cat-card::before { content: ''; position: absolute; inset: 0; opacity: 0; transition: var(--transition); }
+  .cat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+  .cat-icon {
+    width: 50px; height: 50px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; margin-bottom: 14px; transition: var(--transition);
+  }
+  .cat-name { font-family: 'Mukta', sans-serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; }
+  .cat-count { font-size: 0.82rem; color: var(--text-muted); }
+  /* Category colors */
+  .cat-orange .cat-icon { background: var(--saffron-light); color: var(--saffron); }
+  .cat-orange:hover { border-color: var(--saffron); }
+  .cat-orange:hover .cat-icon { background: var(--saffron); color: white; }
+  .cat-green .cat-icon { background: var(--green-light); color: var(--green); }
+  .cat-green:hover { border-color: var(--green); }
+  .cat-green:hover .cat-icon { background: var(--green); color: white; }
+  .cat-blue .cat-icon { background: #e8f0fe; color: #1967d2; }
+  .cat-blue:hover { border-color: #1967d2; }
+  .cat-blue:hover .cat-icon { background: #1967d2; color: white; }
+  .cat-purple .cat-icon { background: #f3e8fd; color: #7c3aed; }
+  .cat-purple:hover { border-color: #7c3aed; }
+  .cat-purple:hover .cat-icon { background: #7c3aed; color: white; }
+  .cat-red .cat-icon { background: #fce8e8; color: #dc2626; }
+  .cat-red:hover { border-color: #dc2626; }
+  .cat-red:hover .cat-icon { background: #dc2626; color: white; }
+  .cat-teal .cat-icon { background: #e6f9f7; color: #0d9488; }
+  .cat-teal:hover { border-color: #0d9488; }
+  .cat-teal:hover .cat-icon { background: #0d9488; color: white; }
+  .cat-indigo .cat-icon { background: #e8eafe; color: #4338ca; }
+  .cat-indigo:hover { border-color: #4338ca; }
+  .cat-indigo:hover .cat-icon { background: #4338ca; color: white; }
+  .cat-pink .cat-icon { background: #fce8f4; color: #db2777; }
+  .cat-pink:hover { border-color: #db2777; }
+  .cat-pink:hover .cat-icon { background: #db2777; color: white; }
+
+  /* ===== SCHEME CARDS ===== */
+  .schemes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+  .scheme-card {
+    background: var(--card); border: 1.5px solid var(--border);
+    border-radius: var(--radius); overflow: hidden;
+    display: flex; flex-direction: column;
+    transition: var(--transition); position: relative;
+  }
+  .scheme-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.12); border-color: var(--saffron); }
+  .scheme-card-body { padding: 22px; flex: 1; display: flex; flex-direction: column; }
+  .scheme-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+  .scheme-tag {
+    font-size: 0.72rem; font-weight: 800; letter-spacing: 0.07em;
+    text-transform: uppercase; padding: 4px 10px; border-radius: 50px;
+  }
+  .tag-education { background: var(--saffron-light); color: var(--saffron); }
+  .tag-healthcare { background: var(--green-light); color: var(--green); }
+  .tag-agriculture { background: #e8f5e9; color: #2e7d32; }
+  .tag-housing { background: #e8eaf6; color: #3949ab; }
+  .tag-women { background: #fce4ec; color: #c2185b; }
+  .tag-employment { background: #e3f2fd; color: #1565c0; }
+  .tag-pension { background: #f3e5f5; color: #7b1fa2; }
+  .tag-skill { background: #e8f5e9; color: #388e3c; }
+  .tag-startup { background: #fff8e1; color: #f57f17; }
+  .tag-digital { background: #e0f7fa; color: #00838f; }
+  .bookmark-btn { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 22px; transition: var(--transition); padding: 2px; }
+  .bookmark-btn:hover, .bookmark-btn.active { color: var(--saffron); }
+  .scheme-title { font-family: 'Mukta', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
+  .scheme-desc { color: var(--text-muted); font-size: 0.88rem; line-height: 1.6; flex: 1; }
+  .scheme-footer {
+    margin-top: 16px; padding-top: 14px;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .scheme-meta { display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 0.83rem; }
+  .scheme-meta .material-symbols-outlined { font-size: 16px; }
+  .btn-apply {
+    background: var(--green); color: white;
+    border: none; border-radius: 8px;
+    padding: 8px 18px; font-weight: 700; font-size: 0.87rem;
+    cursor: pointer; transition: var(--transition);
+    font-family: 'Mukta', sans-serif;
+  }
+  .btn-apply:hover { background: var(--green-dark); transform: translateY(-1px); }
+  .btn-details {
+    background: none; border: 1.5px solid var(--border);
+    color: var(--text); border-radius: 8px;
+    padding: 7px 16px; font-weight: 600; font-size: 0.87rem;
+    cursor: pointer; transition: var(--transition);
+    font-family: 'Noto Sans', sans-serif; margin-right: 8px;
+  }
+  .btn-details:hover { border-color: var(--saffron); color: var(--saffron); }
+
+  /* ===== AI ASSISTANT BANNER ===== */
+  .ai-banner {
+    background: linear-gradient(135deg, #0A2342 0%, #1a3a6e 50%, #2d5a9e 100%);
+    border-radius: 20px;
+    padding: 40px;
+    display: flex; align-items: center; gap: 32px;
+    flex-wrap: wrap;
+    overflow: hidden; position: relative;
+  }
+  .ai-banner::before {
+    content: '🤖'; position: absolute; right: 40px; top: 50%; transform: translateY(-50%);
+    font-size: 100px; opacity: 0.08;
+  }
+  .ai-content { flex: 1; min-width: 260px; }
+  .ai-badge { display: inline-block; background: rgba(255,153,51,0.2); color: var(--saffron); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em; padding: 4px 12px; border-radius: 50px; margin-bottom: 12px; text-transform: uppercase; }
+  .ai-banner h2 { font-family: 'Mukta', sans-serif; font-size: 1.7rem; font-weight: 800; color: white; margin-bottom: 8px; }
+  .ai-banner p { color: rgba(255,255,255,0.75); font-size: 0.95rem; line-height: 1.6; }
+  .btn-ai { background: var(--saffron); color: white; border: none; border-radius: 12px; padding: 14px 28px; font-family: 'Mukta', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: var(--transition); white-space: nowrap; }
+  .btn-ai:hover { background: var(--saffron-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,153,51,0.4); }
+
+  /* ===== HOW IT WORKS ===== */
+  .steps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; }
+  .step-card { text-align: center; padding: 28px 20px; background: var(--card); border-radius: var(--radius); border: 1.5px solid var(--border); position: relative; }
+  .step-num { width: 48px; height: 48px; background: linear-gradient(135deg, var(--saffron), #ff6b00); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Mukta', sans-serif; font-size: 1.2rem; font-weight: 800; color: white; margin: 0 auto 16px; }
+  .step-icon { font-size: 32px; margin-bottom: 12px; display: block; }
+  .step-title { font-family: 'Mukta', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 8px; }
+  .step-desc { color: var(--text-muted); font-size: 0.87rem; line-height: 1.6; }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: #0A2342; color: rgba(255,255,255,0.85);
+    margin-top: 0;
+  }
+  .footer-main {
+    max-width: 1200px; margin: 0 auto;
+    padding: 48px 24px;
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px;
+  }
+  .footer-brand p { font-size: 0.9rem; color: rgba(255,255,255,0.6); line-height: 1.7; margin-top: 12px; max-width: 280px; }
+  .footer-col h4 { font-family: 'Mukta', sans-serif; font-weight: 700; margin-bottom: 16px; color: white; font-size: 0.95rem; }
+  .footer-col a { display: block; color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.88rem; margin-bottom: 10px; transition: var(--transition); }
+  .footer-col a:hover { color: var(--saffron); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding: 16px 24px; text-align: center; font-size: 0.83rem; color: rgba(255,255,255,0.45); }
+  .tricolor-bar { height: 5px; background: linear-gradient(to right, #FF9933 33.3%, white 33.3% 66.6%, #138808 66.6%); }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 2000;
+    background: rgba(0,0,0,0.55); backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px; opacity: 0; pointer-events: none; transition: opacity 0.25s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--card); border-radius: 20px;
+    width: 100%; max-width: 440px;
+    padding: 36px; position: relative;
+    transform: translateY(20px); transition: transform 0.25s;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+  }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 24px; transition: var(--transition); }
+  .modal-close:hover { color: var(--text); }
+  .modal-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
+  .modal h2 { font-family: 'Mukta', sans-serif; font-size: 1.6rem; font-weight: 800; margin-bottom: 6px; }
+  .modal-sub { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-muted); }
+  .form-group input {
+    width: 100%; height: 46px; padding: 0 14px;
+    background: var(--bg); border: 1.5px solid var(--border);
+    border-radius: 10px; color: var(--text); font-size: 0.95rem;
+    font-family: 'Noto Sans', sans-serif; outline: none; transition: var(--transition);
+  }
+  .form-group input:focus { border-color: var(--saffron); box-shadow: 0 0 0 3px rgba(255,153,51,0.15); }
+  .btn-submit {
+    width: 100%; height: 48px;
+    background: linear-gradient(135deg, var(--saffron), #ff6b00);
+    color: white; border: none; border-radius: 10px;
+    font-family: 'Mukta', sans-serif; font-size: 1.05rem; font-weight: 700;
+    cursor: pointer; transition: var(--transition); margin-top: 8px;
+  }
+  .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,153,51,0.4); }
+  .modal-divider { text-align: center; color: var(--text-muted); font-size: 0.85rem; margin: 16px 0; position: relative; }
+  .modal-divider::before, .modal-divider::after { content: ''; position: absolute; top: 50%; width: 38%; height: 1px; background: var(--border); }
+  .modal-divider::before { left: 0; } .modal-divider::after { right: 0; }
+  .btn-digilocker { width: 100%; height: 46px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; font-weight: 600; font-size: 0.9rem; cursor: pointer; color: var(--text); transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .btn-digilocker:hover { border-color: var(--saffron); background: var(--saffron-light); }
+  .modal-footer { text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--text-muted); }
+  .modal-footer a { color: var(--saffron); font-weight: 700; cursor: pointer; text-decoration: none; }
+  .modal-tabs { display: flex; background: var(--bg); border-radius: 10px; padding: 4px; margin-bottom: 24px; }
+  .modal-tab { flex: 1; padding: 9px; text-align: center; border: none; background: none; font-family: 'Mukta', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer; border-radius: 8px; color: var(--text-muted); transition: var(--transition); }
+  .modal-tab.active { background: var(--card); color: var(--saffron); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+
+  /* ===== SCHEME DETAIL MODAL ===== */
+  .scheme-modal { max-width: 600px; }
+  .scheme-modal-header { margin-bottom: 20px; }
+  .scheme-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
+  .detail-item { background: var(--bg); border-radius: 10px; padding: 14px; }
+  .detail-item .label { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .detail-item .value { font-weight: 700; font-size: 0.95rem; }
+  .eligibility-list { list-style: none; }
+  .eligibility-list li { display: flex; align-items: flex-start; gap: 8px; font-size: 0.88rem; padding: 6px 0; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+  .eligibility-list li:last-child { border-bottom: none; }
+  .eligibility-list li .material-symbols-outlined { color: var(--green); font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .btn-apply-large { width: 100%; height: 50px; background: linear-gradient(135deg, var(--green), #1da010); color: white; border: none; border-radius: 12px; font-family: 'Mukta', sans-serif; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: var(--transition); margin-top: 12px; }
+  .btn-apply-large:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(19,136,8,0.35); }
+
+  /* ===== TOAST ===== */
+  .toast { position: fixed; bottom: 24px; right: 24px; z-index: 9999; background: #1a1a2e; color: white; padding: 14px 22px; border-radius: 12px; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); transform: translateY(80px); opacity: 0; transition: all 0.3s; pointer-events: none; }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast .material-symbols-outlined { color: var(--green); }
+
+  /* ===== SEARCH RESULTS ===== */
+  #search-results-section { display: none; }
+  #search-results-section.visible { display: block; }
+  .no-results { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+  .no-results .material-symbols-outlined { font-size: 56px; display: block; margin-bottom: 16px; color: var(--border); }
+
+  /* ===== MOBILE NAV ===== */
+  .mobile-menu { display: none; flex-direction: column; background: var(--card); border-bottom: 1px solid var(--border); padding: 16px 24px; gap: 4px; }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { padding: 10px 14px; border-radius: 8px; color: var(--text); text-decoration: none; font-weight: 600; transition: var(--transition); }
+  .mobile-menu a:hover { background: var(--saffron-light); color: var(--saffron); }
+  .mobile-menu .btn-signin { margin-top: 8px; width: 100%; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .nav-links, .nav-right .btn-signin { display: none !important; }
+    .hamburger { display: flex; }
+    .hero { padding: 48px 20px 40px; }
+    .search-card { padding: 18px; }
+    .stats-inner { gap: 0; }
+    .stat-item { padding: 8px 16px; }
+    .footer-main { grid-template-columns: 1fr 1fr; gap: 28px; }
+    .ai-banner::before { display: none; }
+    .scheme-detail-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .stat-num { font-size: 1.3rem; }
+    .footer-main { grid-template-columns: 1fr; }
+    .categories-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TRICOLOR TOP BAR -->
+<div class="tricolor-bar"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="logo" onclick="scrollToTop()">
+      <div class="logo-icon"><span class="material-symbols-outlined" style="font-size:22px">assured_workload</span></div>
+      <div class="logo-text">Sevak<span>AI</span></div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#home" class="active">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#schemes-section">Schemes</a></li>
+      <li><a href="#how-it-works">How it Works</a></li>
+      <li><a href="#helpdesk">Help Desk</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="btn-theme" onclick="toggleTheme()" title="Toggle theme">
+        <span class="material-symbols-outlined" id="theme-icon">dark_mode</span>
+      </button>
+      <button class="btn-signin" onclick="openModal('signin')">Sign In</button>
+      <button class="hamburger" onclick="toggleMobileMenu()">
+        <span class="material-symbols-outlined" id="hamburger-icon">menu</span>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#home" onclick="closeMobileMenu()">🏠 Home</a>
+    <a href="#about" onclick="closeMobileMenu()">ℹ️ About</a>
+    <a href="#schemes-section" onclick="closeMobileMenu()">📋 Schemes</a>
+    <a href="#how-it-works" onclick="closeMobileMenu()">🔄 How it Works</a>
+    <a href="#helpdesk" onclick="closeMobileMenu()">💬 Help Desk</a>
+    <button class="btn-signin" onclick="openModal('signin'); closeMobileMenu()">Sign In</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-ashoka"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="material-symbols-outlined" style="font-size:16px">verified</span>
+      Official Government Scheme Portal of India
+    </div>
+    <h1>Find Government<br>Schemes for <span>You</span></h1>
+    <p class="hero-sub">Discover benefits based on your age, location, income and needs. SevakAI empowers every citizen with accessible, personalised information about 1,000+ government programmes.</p>
+
+    <div class="search-card">
+      <div class="search-field">
+        <label>State / UT</label>
+        <select id="filter-state">
+          <option value="">All States</option>
+          <option>Andhra Pradesh</option><option>Arunachal Pradesh</option>
+          <option>Assam</option><option>Bihar</option><option>Chhattisgarh</option>
+          <option>Goa</option><option>Gujarat</option><option>Haryana</option>
+          <option>Himachal Pradesh</option><option>Jharkhand</option>
+          <option>Karnataka</option><option>Kerala</option>
+          <option>Madhya Pradesh</option><option>Maharashtra</option>
+          <option>Manipur</option><option>Meghalaya</option><option>Mizoram</option>
+          <option>Nagaland</option><option>Odisha</option><option>Punjab</option>
+          <option>Rajasthan</option><option>Sikkim</option><option>Tamil Nadu</option>
+          <option>Telangana</option><option>Tripura</option>
+          <option>Uttar Pradesh</option><option>Uttarakhand</option>
+          <option>West Bengal</option>
+          <option>Delhi</option><option>Chandigarh</option>
+          <option>Jammu & Kashmir</option><option>Ladakh</option>
+          <option>Puducherry</option>
+        </select>
+      </div>
+      <div class="search-field">
+        <label>Age Group</label>
+        <select id="filter-age">
+          <option value="">All Ages</option>
+          <option>0–18 Years (Youth)</option>
+          <option>19–35 Years (Young Adult)</option>
+          <option>36–55 Years (Adult)</option>
+          <option>56–60 Years (Pre-Senior)</option>
+          <option>60+ Years (Senior Citizen)</option>
+        </select>
+      </div>
+      <div class="search-field">
+        <label>Category</label>
+        <select id="filter-category">
+          <option value="">All Categories</option>
+          <option>Education</option><option>Healthcare</option>
+          <option>Agriculture</option><option>Housing</option>
+          <option>Women & Child</option><option>Employment</option>
+          <option>Pension</option><option>Skill Development</option>
+          <option>Startup</option><option>Digital India</option>
+        </select>
+      </div>
+      <div class="search-field" style="flex:2">
+        <label>Search Keyword</label>
+        <div class="search-input-wrap">
+          <span class="material-symbols-outlined">search</span>
+          <input type="text" id="search-input" placeholder="e.g., Scholarship, Pension, Farmer…" onkeydown="if(event.key==='Enter') doSearch()"/>
+        </div>
+      </div>
+      <button class="btn-find" onclick="doSearch()">
+        <span class="material-symbols-outlined">search</span>
+        Find Schemes
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <div class="stat-num">1,200+</div>
+      <div class="stat-label">Total Schemes</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">36</div>
+      <div class="stat-label">States & UTs</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">14Cr+</div>
+      <div class="stat-label">Beneficiaries</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">₹2.5L Cr</div>
+      <div class="stat-label">Disbursed</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">24/7</div>
+      <div class="stat-label">AI Help Desk</div>
+    </div>
+  </div>
+</div>
+
+<!-- SEARCH RESULTS (hidden by default) -->
+<section id="search-results-section" class="section">
+  <div class="main">
+    <div class="section-row">
+      <div class="section-header" style="margin-bottom:0">
+        <h2>Search Results</h2>
+        <p id="results-count">Showing all schemes</p>
+      </div>
+      <a class="link-viewall" onclick="clearSearch()" style="cursor:pointer">
+        Clear Filters <span class="material-symbols-outlined" style="font-size:16px">close</span>
+      </a>
+    </div>
+    <div class="schemes-grid" id="search-results-grid" style="margin-top:24px"></div>
+    <div class="no-results" id="no-results" style="display:none">
+      <span class="material-symbols-outlined">search_off</span>
+      <h3>No schemes found</h3>
+      <p>Try different keywords or broaden your filters</p>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+  <!-- CATEGORIES -->
+  <section class="section" id="about">
+    <div class="section-header">
+      <h2>Browse by Category</h2>
+      <p>Explore government schemes tailored to specific sectors and needs across India.</p>
+    </div>
+    <div class="categories-grid">
+      <div class="cat-card cat-orange" onclick="filterByCategory('Education')">
+        <div class="cat-icon"><span class="material-symbols-outlined">school</span></div>
+        <div class="cat-name">Education</div>
+        <div class="cat-count">180+ schemes</div>
+      </div>
+      <div class="cat-card cat-green" onclick="filterByCategory('Healthcare')">
+        <div class="cat-icon"><span class="material-symbols-outlined">favorite</span></div>
+        <div class="cat-name">Healthcare</div>
+        <div class="cat-count">140+ schemes</div>
+      </div>
+      <div class="cat-card cat-green" onclick="filterByCategory('Agriculture')">
+        <div class="cat-icon"><span class="material-symbols-outlined">agriculture</span></div>
+        <div class="cat-name">Agriculture</div>
+        <div class="cat-count">200+ schemes</div>
+      </div>
+      <div class="cat-card cat-blue" onclick="filterByCategory('Housing')">
+        <div class="cat-icon"><span class="material-symbols-outlined">home_work</span></div>
+        <div class="cat-name">Housing</div>
+        <div class="cat-count">80+ schemes</div>
+      </div>
+      <div class="cat-card cat-pink" onclick="filterByCategory('Women & Child')">
+        <div class="cat-icon"><span class="material-symbols-outlined">child_care</span></div>
+        <div class="cat-name">Women & Child</div>
+        <div class="cat-count">120+ schemes</div>
+      </div>
+      <div class="cat-card cat-indigo" onclick="filterByCategory('Employment')">
+        <div class="cat-icon"><span class="material-symbols-outlined">work</span></div>
+        <div class="cat-name">Employment</div>
+        <div class="cat-count">90+ schemes</div>
+      </div>
+      <div class="cat-card cat-purple" onclick="filterByCategory('Pension')">
+        <div class="cat-icon"><span class="material-symbols-outlined">elderly</span></div>
+        <div class="cat-name">Pension</div>
+        <div class="cat-count">40+ schemes</div>
+      </div>
+      <div class="cat-card cat-teal" onclick="filterByCategory('Skill Development')">
+        <div class="cat-icon"><span class="material-symbols-outlined">build</span></div>
+        <div class="cat-name">Skill Dev.</div>
+        <div class="cat-count">70+ schemes</div>
+      </div>
+      <div class="cat-card cat-orange" onclick="filterByCategory('Startup')">
+        <div class="cat-icon"><span class="material-symbols-outlined">rocket_launch</span></div>
+        <div class="cat-name">Startup India</div>
+        <div class="cat-count">35+ schemes</div>
+      </div>
+      <div class="cat-card cat-blue" onclick="filterByCategory('Digital India')">
+        <div class="cat-icon"><span class="material-symbols-outlined">devices</span></div>
+        <div class="cat-name">Digital India</div>
+        <div class="cat-count">55+ schemes</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRENDING SCHEMES -->
+  <section class="section" id="schemes-section">
+    <div class="section-row">
+      <div class="section-header" style="margin-bottom:0">
+        <h2>Trending Schemes</h2>
+        <p>Most sought-after government programmes right now</p>
+      </div>
+      <a class="link-viewall" onclick="showAllSchemes()">View All <span class="material-symbols-outlined" style="font-size:16px">arrow_forward</span></a>
+    </div>
+    <div class="schemes-grid" id="trending-grid"></div>
+  </section>
+
+  <!-- AI ASSISTANT BANNER -->
+  <section class="section" style="padding-top:0">
+    <div class="ai-banner">
+      <div class="ai-content">
+        <div class="ai-badge">✨ AI-Powered</div>
+        <h2>Not sure which scheme fits you?</h2>
+        <p>Our AI assistant analyses your profile — age, income, location, occupation — and recommends the most relevant government schemes in seconds. Available in Hindi, English & 10+ regional languages.</p>
+      </div>
+      <button class="btn-ai" onclick="openAIChat()">
+        <span class="material-symbols-outlined" style="vertical-align:middle;margin-right:6px">smart_toy</span>
+        Chat with SevakAI
+      </button>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how-it-works">
+    <div class="section-header">
+      <h2>How SevakAI Works</h2>
+      <p>Three simple steps to find and apply for the schemes you deserve</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <span class="step-icon">🔍</span>
+        <div class="step-title">Search & Filter</div>
+        <div class="step-desc">Enter your state, age and keywords. Our engine searches 1,200+ schemes instantly.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <span class="step-icon">🤖</span>
+        <div class="step-title">AI Recommendation</div>
+        <div class="step-desc">Our AI analyses your profile and ranks the schemes most relevant to you.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <span class="step-icon">📋</span>
+        <div class="step-title">Check Eligibility</div>
+        <div class="step-desc">Read scheme details, eligibility criteria, benefits, and required documents.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <span class="step-icon">🚀</span>
+        <div class="step-title">Apply Online</div>
+        <div class="step-desc">Click "Apply Now" to be redirected to the official government portal.</div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /main -->
+
+<!-- HELP DESK SECTION -->
+<section id="helpdesk" style="background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 56px 0;">
+  <div class="main">
+    <div class="section-header" style="text-align:center; margin-bottom: 40px;">
+      <h2>Help Desk</h2>
+      <p>We're here to help every citizen navigate government schemes</p>
+    </div>
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap:20px;">
+      <div style="background:var(--bg); border-radius:14px; padding:28px; border:1.5px solid var(--border); text-align:center;">
+        <div style="font-size:40px; margin-bottom:14px;">📞</div>
+        <h3 style="font-family:'Mukta',sans-serif; font-size:1.05rem; margin-bottom:8px;">Call Us</h3>
+        <p style="color:var(--text-muted); font-size:0.88rem; margin-bottom:12px;">Toll-free helpline available Mon–Sat, 8am–8pm</p>
+        <a href="tel:1800111555" style="color:var(--saffron); font-weight:700; text-decoration:none; font-size:1.05rem;">1800-111-555</a>
+      </div>
+      <div style="background:var(--bg); border-radius:14px; padding:28px; border:1.5px solid var(--border); text-align:center;">
+        <div style="font-size:40px; margin-bottom:14px;">✉️</div>
+        <h3 style="font-family:'Mukta',sans-serif; font-size:1.05rem; margin-bottom:8px;">Email Support</h3>
+        <p style="color:var(--text-muted); font-size:0.88rem; margin-bottom:12px;">Send us your query and we'll respond within 24 hours</p>
+        <a href="mailto:help@sevakai.gov.in" style="color:var(--saffron); font-weight:700; text-decoration:none;">help@sevakai.gov.in</a>
+      </div>
+      <div style="background:var(--bg); border-radius:14px; padding:28px; border:1.5px solid var(--border); text-align:center;">
+        <div style="font-size:40px; margin-bottom:14px;">🤖</div>
+        <h3 style="font-family:'Mukta',sans-serif; font-size:1.05rem; margin-bottom:8px;">AI Chat</h3>
+        <p style="color:var(--text-muted); font-size:0.88rem; margin-bottom:12px;">Get instant answers 24/7 in multiple languages</p>
+        <button onclick="openAIChat()" style="background:var(--saffron); color:white; border:none; border-radius:8px; padding:9px 20px; font-weight:700; cursor:pointer; font-family:'Mukta',sans-serif;">Start Chat</button>
+      </div>
+      <div style="background:var(--bg); border-radius:14px; padding:28px; border:1.5px solid var(--border); text-align:center;">
+        <div style="font-size:40px; margin-bottom:14px;">🏛️</div>
+        <h3 style="font-family:'Mukta',sans-serif; font-size:1.05rem; margin-bottom:8px;">Jan Seva Kendra</h3>
+        <p style="color:var(--text-muted); font-size:0.88rem; margin-bottom:12px;">Visit your nearest Common Service Centre for in-person help</p>
+        <a href="#" style="color:var(--saffron); font-weight:700; text-decoration:none;" onclick="showToast('CSC locator coming soon!')">Find Nearest CSC →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="main">
+  <div style="height: 60px;"></div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-main">
+    <div class="footer-brand">
+      <div class="logo" style="cursor:default">
+        <div class="logo-icon"><span class="material-symbols-outlined" style="font-size:22px">assured_workload</span></div>
+        <div class="logo-text" style="color:white">Sevak<span>AI</span></div>
+      </div>
+      <p>An initiative to help every Indian citizen discover and access government schemes they are entitled to. Built for Bharat, powered by AI.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <a href="#home">Home</a>
+      <a href="#schemes-section">All Schemes</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#helpdesk">Help Desk</a>
+      <a href="#" onclick="openModal('signin')">Sign In</a>
+    </div>
+    <div class="footer-col">
+      <h4>Categories</h4>
+      <a href="#" onclick="filterByCategory('Education')">Education</a>
+      <a href="#" onclick="filterByCategory('Healthcare')">Healthcare</a>
+      <a href="#" onclick="filterByCategory('Agriculture')">Agriculture</a>
+      <a href="#" onclick="filterByCategory('Housing')">Housing</a>
+      <a href="#" onclick="filterByCategory('Employment')">Employment</a>
+    </div>
+    <div class="footer-col">
+      <h4>Official Portals</h4>
+      <a href="https://www.india.gov.in" target="_blank" rel="noopener">india.gov.in</a>
+      <a href="https://www.myscheme.gov.in" target="_blank" rel="noopener">MyScheme Portal</a>
+      <a href="https://www.pmjay.gov.in" target="_blank" rel="noopener">Ayushman Bharat</a>
+      <a href="https://pmkisan.gov.in" target="_blank" rel="noopener">PM Kisan</a>
+      <a href="https://scholarships.gov.in" target="_blank" rel="noopener">NSP Scholarships</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 SevakAI · For informational purposes only · <a href="#" style="color:rgba(255,255,255,0.5)">Privacy Policy</a> · <a href="#" style="color:rgba(255,255,255,0.5)">Terms of Use</a> · <a href="#" style="color:rgba(255,255,255,0.5)">Accessibility</a></p>
+  </div>
+</footer>
+
+<!-- SIGN IN / REGISTER MODAL -->
+<div class="modal-overlay" id="auth-modal" onclick="handleOverlayClick(event)">
+  <div class="modal" id="auth-modal-inner">
+    <button class="modal-close" onclick="closeModal('auth-modal')">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="modal-logo">
+      <div class="logo-icon" style="width:36px;height:36px;font-size:18px"><span class="material-symbols-outlined" style="font-size:18px">assured_workload</span></div>
+      <div class="logo-text">Sevak<span style="color:var(--saffron)">AI</span></div>
+    </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tab-signin" onclick="switchTab('signin')">Sign In</button>
+      <button class="modal-tab" id="tab-register" onclick="switchTab('register')">Register</button>
+    </div>
+    <!-- SIGN IN FORM -->
+    <div id="form-signin">
+      <h2>Welcome Back</h2>
+      <p class="modal-sub">Sign in to track your scheme applications</p>
+      <div class="form-group"><label>Mobile Number or Aadhaar</label><input type="text" placeholder="Enter mobile number or Aadhaar" id="signin-id"/></div>
+      <div class="form-group"><label>Password / OTP</label><input type="password" placeholder="Enter password or OTP" id="signin-pass"/></div>
+      <button class="btn-submit" onclick="handleSignIn()">Sign In</button>
+      <div class="modal-divider">or</div>
+      <button class="btn-digilocker" onclick="showToast('DigiLocker integration coming soon!')">
+        <span style="font-size:20px">🔐</span> Sign in with DigiLocker
+      </button>
+      <div class="modal-footer">Don't have an account? <a onclick="switchTab('register')">Register here</a></div>
+    </div>
+    <!-- REGISTER FORM -->
+    <div id="form-register" style="display:none">
+      <h2>Create Account</h2>
+      <p class="modal-sub">Join millions of citizens finding their schemes</p>
+      <div class="form-group"><label>Full Name</label><input type="text" placeholder="As on Aadhaar" id="reg-name"/></div>
+      <div class="form-group"><label>Mobile Number</label><input type="tel" placeholder="+91 98765 43210" id="reg-mobile"/></div>
+      <div class="form-group"><label>State</label>
+        <select style="width:100%;height:46px;padding:0 14px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:0.95rem;font-family:'Noto Sans',sans-serif;outline:none;" id="reg-state">
+          <option>Select your state</option>
+          <option>Andhra Pradesh</option><option>Assam</option><option>Bihar</option>
+          <option>Delhi</option><option>Gujarat</option><option>Karnataka</option>
+          <option>Kerala</option><option>Maharashtra</option><option>Odisha</option>
+          <option>Punjab</option><option>Rajasthan</option><option>Tamil Nadu</option>
+          <option>Telangana</option><option>Uttar Pradesh</option><option>West Bengal</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Password</label><input type="password" placeholder="Create a strong password" id="reg-pass"/></div>
+      <button class="btn-submit" onclick="handleRegister()">Create Account & Get OTP</button>
+      <div class="modal-footer">Already have an account? <a onclick="switchTab('signin')">Sign In</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- SCHEME DETAIL MODAL -->
+<div class="modal-overlay" id="scheme-modal" onclick="handleOverlayClick(event)">
+  <div class="modal scheme-modal" id="scheme-modal-inner">
+    <button class="modal-close" onclick="closeModal('scheme-modal')">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <div id="scheme-detail-content"></div>
+  </div>
+</div>
+
+<!-- AI CHAT MODAL -->
+<div class="modal-overlay" id="ai-modal" onclick="handleOverlayClick(event)">
+  <div class="modal" style="max-width:500px" id="ai-modal-inner">
+    <button class="modal-close" onclick="closeModal('ai-modal')">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+      <div style="width:46px;height:46px;background:linear-gradient(135deg,#0A2342,#1a5c9e);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px">🤖</div>
+      <div>
+        <div style="font-family:'Mukta',sans-serif;font-weight:800;font-size:1.1rem">SevakAI Assistant</div>
+        <div style="font-size:0.8rem;color:var(--green);font-weight:600">● Online</div>
+      </div>
+    </div>
+    <div id="chat-messages" style="height:320px;overflow-y:auto;background:var(--bg);border-radius:12px;padding:16px;margin-bottom:14px;display:flex;flex-direction:column;gap:12px;"></div>
+    <div style="display:flex;gap:10px">
+      <input type="text" id="chat-input" placeholder="Ask about any scheme…" style="flex:1;height:44px;padding:0 14px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:0.92rem;font-family:'Noto Sans',sans-serif;outline:none;" onkeydown="if(event.key==='Enter') sendChat()"/>
+      <button onclick="sendChat()" style="width:44px;height:44px;background:var(--saffron);border:none;border-radius:10px;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+        <span class="material-symbols-outlined">send</span>
+      </button>
+    </div>
+    <p style="font-size:0.75rem;color:var(--text-muted);margin-top:10px;text-align:center">Available in English, Hindi, Tamil, Telugu, Bengali & more</p>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="material-symbols-outlined">check_circle</span>
+  <span id="toast-msg">Done!</span>
+</div>
+
+<script>
+// ===== DATA =====
+const schemes = [
+  {
+    id: 1,
+    name: "National Means-cum-Merit Scholarship",
+    category: "Education",
+    tag: "tag-education",
+    icon: "school",
+    desc: "Financial assistance to meritorious students of economically weaker sections to arrest dropout at class VIII and encourage them to continue study at secondary and senior secondary level.",
+    eligibility: ["Class VIII students with 55%+ marks", "Family income below ₹3.5 lakh/year", "Studying in government/aided schools", "SC/ST: 5% marks relaxation"],
+    benefit: "₹12,000/year",
+    ministry: "Ministry of Education",
+    state: "All States",
+    audience: "Students",
+    link: "https://scholarships.gov.in",
+    deadline: "31 Oct 2025"
+  },
+  {
+    id: 2,
+    name: "Ayushman Bharat – PM-JAY",
+    category: "Healthcare",
+    tag: "tag-healthcare",
+    icon: "favorite",
+    desc: "World's largest government-funded health assurance scheme providing coverage of ₹5 lakh per family per year for secondary and tertiary hospitalisation.",
+    eligibility: ["Deprivation-based SECC data households", "No cap on family size or age", "Pre-existing conditions covered", "Covers 1,929 treatment packages"],
+    benefit: "₹5 lakh/year",
+    ministry: "MoHFW",
+    state: "All States",
+    audience: "All Citizens",
+    link: "https://pmjay.gov.in",
+    deadline: "Ongoing"
+  },
+  {
+    id: 3,
+    name: "PM Kisan Samman Nidhi",
+    category: "Agriculture",
+    tag: "tag-agriculture",
+    icon: "agriculture",
+    desc: "A minimum income support scheme providing ₹6,000 per year to all farmer families across India in 3 equal instalments of ₹2,000 directly into their bank accounts.",
+    eligibility: ["Landholder farmer families", "Valid Aadhaar and bank account", "Excludes institutional landholders", "Excludes retired govt employees with pension"],
+    benefit: "₹6,000/year",
+    ministry: "Ministry of Agriculture",
+    state: "All States",
+    audience: "Farmers",
+    link: "https://pmkisan.gov.in",
+    deadline: "Ongoing"
+  },
+  {
+    id: 4,
+    name: "Pradhan Mantri Awas Yojana (Urban)",
+    category: "Housing",
+    tag: "tag-housing",
+    icon: "home_work",
+    desc: "Affordable housing for all urban poor — provides interest subsidy and direct benefit transfer for construction and purchase of houses in urban areas.",
+    eligibility: ["EWS/LIG households", "Annual income up to ₹6 lakh (EWS), ₹12 lakh (LIG)", "Must not own pucca house in India", "Preference to SC/ST/OBC, women"],
+    benefit: "Up to ₹2.67 lakh subsidy",
+    ministry: "MoHUA",
+    state: "All States",
+    audience: "Urban Poor",
+    link: "https://pmaymis.gov.in",
+    deadline: "31 Mar 2026"
+  },
+  {
+    id: 5,
+    name: "Beti Bachao Beti Padhao",
+    category: "Women & Child",
+    tag: "tag-women",
+    icon: "child_care",
+    desc: "A tri-ministerial scheme to prevent gender-biased sex selective elimination, ensure survival, protection and education of the girl child.",
+    eligibility: ["Girl child from birth", "Families in 640 districts", "Sukanya Samriddhi Account eligibility", "Age up to 10 years for account opening"],
+    benefit: "Educational & welfare support",
+    ministry: "WCD, Education, Health",
+    state: "All States",
+    audience: "Girl Child",
+    link: "https://wcd.nic.in",
+    deadline: "Ongoing"
+  },
+  {
+    id: 6,
+    name: "MGNREGS – 100 Days Guarantee",
+    category: "Employment",
+    tag: "tag-employment",
+    icon: "work",
+    desc: "Guarantees 100 days of wage employment in a financial year to every rural household whose adult members are willing to do unskilled manual work.",
+    eligibility: ["Rural household residents", "Adult members (18+ years)", "Willing to do unskilled manual labour", "Register at local gram panchayat"],
+    benefit: "100 days guaranteed work",
+    ministry: "MoRD",
+    state: "All States",
+    audience: "Rural Adults",
+    link: "https://nrega.nic.in",
+    deadline: "Ongoing"
+  },
+  {
+    id: 7,
+    name: "Pradhan Mantri Ujjwala Yojana",
+    category: "Women & Child",
+    tag: "tag-women",
+    icon: "local_fire_department",
+    desc: "Provides free LPG gas connections to women from Below Poverty Line (BPL) households to replace traditional cooking fuels that cause health hazards.",
+    eligibility: ["BPL household women", "Age 18+ years", "Valid Aadhaar and Bank Account", "No existing LPG connection"],
+    benefit: "Free LPG connection + refill subsidy",
+    ministry: "Ministry of Petroleum",
+    state: "All States",
+    audience: "BPL Women",
+    link: "https://pmuy.gov.in",
+    deadline: "Ongoing"
+  },
+  {
+    id: 8,
+    name: "Pradhan Mantri Mudra Yojana",
+    category: "Employment",
+    tag: "tag-employment",
+    icon: "payments",
+    desc: "Provides loans up to ₹10 lakh to non-corporate, non-farm small/micro enterprises through Shishu (₹50k), Kishore (₹5L) and Tarun (₹10L) categories.",
+    eligibility: ["Non-farm micro/small enterprises", "Non-corporate businesses", "No collateral required for Shishu", "Existing and new businesses"],
+    benefit: "Loans ₹50,000 to ₹10 lakh",
+    ministry: "Ministry of Finance",
+    state: "All States",
+    audience: "Small Entrepreneurs",
+    link: "https://mudra.org.in",
+    deadline: "Ongoing"
+  },
+  {
+    id: 9,
+    name: "National Pension Scheme (NPS)",
+    category: "Pension",
+    tag: "tag-pension",
+    icon: "elderly",
+    desc: "A government-sponsored pension cum investment scheme. Open to government employees and citizens aged 18-70 years to build a retirement corpus.",
+    eligibility: ["Indian citizens aged 18–70", "Resident or Non-Resident Indians", "KYC compliance required", "Minimum contribution ₹500/year"],
+    benefit: "Tax-free retirement corpus",
+    ministry: "Ministry of Finance",
+    state: "All States",
+    audience: "All Citizens",
+    link: "https://npscra.nsdl.co.in",
+    deadline: "Ongoing"
+  },
+  {
+    id: 10,
+    name: "PM Vishwakarma Yojana",
+    category: "Skill Development",
+    tag: "tag-skill",
+    icon: "build",
+    desc: "Support for artisans and craftspeople from 18 traditional trades including blacksmiths, goldsmiths, potters, weavers — with recognition, skilling and credit support.",
+    eligibility: ["18 traditional trade artisans", "Working with hands and tools", "Engaged in family occupation", "One person per family"],
+    benefit: "₹1–2 lakh credit + stipend",
+    ministry: "MSME",
+    state: "All States",
+    audience: "Artisans",
+    link: "https://pmvishwakarma.gov.in",
+    deadline: "Ongoing"
+  },
+  {
+    id: 11,
+    name: "Startup India Seed Fund",
+    category: "Startup",
+    tag: "tag-startup",
+    icon: "rocket_launch",
+    desc: "Financial assistance to early-stage startups for proof of concept, prototype development, product trials, market entry and commercialisation.",
+    eligibility: ["DPIIT-recognised startup", "Less than 2 years old at application", "Not received >₹10 lakh in other schemes", "Technology-based innovative product"],
+    benefit: "Up to ₹20 lakh grant",
+    ministry: "DPIIT",
+    state: "All States",
+    audience: "Startups",
+    link: "https://startupindia.gov.in",
+    deadline: "Rolling applications"
+  },
+  {
+    id: 12,
+    name: "Digital Saksharta Abhiyan",
+    category: "Digital India",
+    tag: "tag-digital",
+    icon: "devices",
+    desc: "Aims to make 6 crore persons in rural areas digitally literate, enabling them to operate computers, use internet, access government services and make digital payments.",
+    eligibility: ["Rural household members", "Persons who are not digitally literate", "Priority to SC/ST, women, minorities", "Aged 14–60 years"],
+    benefit: "Free digital literacy training",
+    ministry: "MeitY",
+    state: "All States",
+    audience: "Rural Citizens",
+    link: "https://www.pmgdisha.in",
+    deadline: "Ongoing"
+  }
+];
+
+// ===== RENDER SCHEME CARD =====
+function renderSchemeCard(s) {
+  return `
+    <div class="scheme-card">
+      <div class="scheme-card-body">
+        <div class="scheme-top">
+          <span class="scheme-tag ${s.tag}">${s.category}</span>
+          <button class="bookmark-btn" id="bm-${s.id}" onclick="toggleBookmark(${s.id})" title="Save scheme">
+            <span class="material-symbols-outlined">bookmark_border</span>
+          </button>
+        </div>
+        <h3 class="scheme-title">${s.name}</h3>
+        <p class="scheme-desc">${s.desc.substring(0, 140)}…</p>
+        <div class="scheme-footer">
+          <div class="scheme-meta">
+            <span class="material-symbols-outlined">${s.icon}</span>
+            ${s.audience}
+          </div>
+          <div>
+            <button class="btn-details" onclick="showSchemeDetail(${s.id})">Details</button>
+            <button class="btn-apply" onclick="applyScheme(${s.id}, '${s.link}')">Apply Now</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ===== INIT =====
+function initPage() {
+  const grid = document.getElementById('trending-grid');
+  grid.innerHTML = schemes.slice(0, 6).map(renderSchemeCard).join('');
+}
+initPage();
+
+// ===== SEARCH =====
+function doSearch() {
+  const state = document.getElementById('filter-state').value.toLowerCase();
+  const age = document.getElementById('filter-age').value.toLowerCase();
+  const cat = document.getElementById('filter-category').value.toLowerCase();
+  const kw = document.getElementById('search-input').value.toLowerCase().trim();
+
+  const results = schemes.filter(s => {
+    const matchCat = !cat || s.category.toLowerCase().includes(cat);
+    const matchKw = !kw || s.name.toLowerCase().includes(kw) || s.desc.toLowerCase().includes(kw) || s.category.toLowerCase().includes(kw) || s.audience.toLowerCase().includes(kw);
+    return matchCat && matchKw;
+  });
+
+  const section = document.getElementById('search-results-section');
+  const grid = document.getElementById('search-results-grid');
+  const noRes = document.getElementById('no-results');
+  const count = document.getElementById('results-count');
+
+  section.classList.add('visible');
+
+  if (results.length === 0) {
+    grid.innerHTML = '';
+    noRes.style.display = 'block';
+    count.textContent = 'No schemes found';
+  } else {
+    noRes.style.display = 'none';
+    grid.innerHTML = results.map(renderSchemeCard).join('');
+    count.textContent = `Found ${results.length} scheme${results.length > 1 ? 's' : ''}`;
+  }
+
+  document.getElementById('search-results-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function clearSearch() {
+  document.getElementById('filter-state').value = '';
+  document.getElementById('filter-age').value = '';
+  document.getElementById('filter-category').value = '';
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-results-section').classList.remove('visible');
+}
+
+function filterByCategory(cat) {
+  document.getElementById('filter-category').value = cat;
+  document.getElementById('search-input').value = '';
+  doSearch();
+}
+
+function showAllSchemes() {
+  document.getElementById('filter-category').value = '';
+  document.getElementById('search-input').value = '';
+  const section = document.getElementById('search-results-section');
+  const grid = document.getElementById('search-results-grid');
+  const noRes = document.getElementById('no-results');
+  const count = document.getElementById('results-count');
+  section.classList.add('visible');
+  noRes.style.display = 'none';
+  grid.innerHTML = schemes.map(renderSchemeCard).join('');
+  count.textContent = `Showing all ${schemes.length} schemes`;
+  section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ===== SCHEME DETAIL =====
+function showSchemeDetail(id) {
+  const s = schemes.find(x => x.id === id);
+  if (!s) return;
+  const html = `
+    <div class="scheme-modal-header">
+      <span class="scheme-tag ${s.tag}" style="margin-bottom:10px;display:inline-block">${s.category}</span>
+      <h2 style="font-family:'Mukta',sans-serif;font-size:1.5rem;font-weight:800;margin-bottom:8px;line-height:1.3">${s.name}</h2>
+      <p style="color:var(--text-muted);font-size:0.9rem;line-height:1.6">${s.desc}</p>
+    </div>
+    <div class="scheme-detail-grid">
+      <div class="detail-item">
+        <div class="label">Benefit</div>
+        <div class="value" style="color:var(--green)">${s.benefit}</div>
+      </div>
+      <div class="detail-item">
+        <div class="label">Ministry</div>
+        <div class="value">${s.ministry}</div>
+      </div>
+      <div class="detail-item">
+        <div class="label">States Covered</div>
+        <div class="value">${s.state}</div>
+      </div>
+      <div class="detail-item">
+        <div class="label">Deadline</div>
+        <div class="value" style="color:var(--saffron)">${s.deadline}</div>
+      </div>
+    </div>
+    <h4 style="font-family:'Mukta',sans-serif;font-weight:700;margin-bottom:12px">Eligibility Criteria</h4>
+    <ul class="eligibility-list">
+      ${s.eligibility.map(e => `<li><span class="material-symbols-outlined">check_circle</span>${e}</li>`).join('')}
+    </ul>
+    <button class="btn-apply-large" onclick="applyScheme(${s.id}, '${s.link}')">
+      <span class="material-symbols-outlined" style="vertical-align:middle;margin-right:6px">open_in_new</span>
+      Apply Now on Official Portal
+    </button>`;
+  document.getElementById('scheme-detail-content').innerHTML = html;
+  openModal('scheme-modal');
+}
+
+function applyScheme(id, link) {
+  closeModal('scheme-modal');
+  showToast('Redirecting to official portal…');
+  setTimeout(() => { window.open(link, '_blank', 'noopener'); }, 600);
+}
+
+// ===== BOOKMARK =====
+const bookmarked = new Set();
+function toggleBookmark(id) {
+  const btn = document.getElementById('bm-' + id);
+  if (!btn) return;
+  if (bookmarked.has(id)) {
+    bookmarked.delete(id);
+    btn.classList.remove('active');
+    btn.innerHTML = '<span class="material-symbols-outlined">bookmark_border</span>';
+    showToast('Scheme removed from saved list');
+  } else {
+    bookmarked.add(id);
+    btn.classList.add('active');
+    btn.innerHTML = '<span class="material-symbols-outlined">bookmark</span>';
+    showToast('Scheme saved to your list!');
+  }
+}
+
+// ===== AUTH MODAL =====
+function openModal(id) {
+  if (id === 'signin') id = 'auth-modal';
+  const el = document.getElementById(id);
+  if (el) el.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleOverlayClick(e) {
+  if (e.target === e.currentTarget) closeModal(e.currentTarget.id);
+}
+function switchTab(tab) {
+  document.getElementById('tab-signin').classList.toggle('active', tab === 'signin');
+  document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+  document.getElementById('form-signin').style.display = tab === 'signin' ? 'block' : 'none';
+  document.getElementById('form-register').style.display = tab === 'register' ? 'block' : 'none';
+}
+function handleSignIn() {
+  const id = document.getElementById('signin-id').value.trim();
+  const pass = document.getElementById('signin-pass').value.trim();
+  if (!id || !pass) { showToast('Please fill in all fields'); return; }
+  showToast('Signing in… Sending OTP to your mobile');
+  setTimeout(() => { closeModal('auth-modal'); showToast('Welcome to SevakAI! 🎉'); }, 1400);
+}
+function handleRegister() {
+  const name = document.getElementById('reg-name').value.trim();
+  const mobile = document.getElementById('reg-mobile').value.trim();
+  if (!name || !mobile) { showToast('Please fill in all fields'); return; }
+  showToast('OTP sent to ' + mobile);
+  setTimeout(() => { closeModal('auth-modal'); showToast('Account created! Welcome, ' + name.split(' ')[0] + '! 🎉'); }, 1400);
+}
+
+// ===== AI CHAT =====
+const chatResponses = {
+  "scholarship": "Great question! For scholarships, I recommend looking at the National Means-cum-Merit Scholarship for class VIII-XII students, and the National Scholarship Portal (scholarships.gov.in) which has 50+ scholarship schemes. Which age group are you asking for?",
+  "farmer": "For farmers, the most popular schemes are: 1) PM Kisan (₹6,000/year income support), 2) Pradhan Mantri Fasal Bima Yojana (crop insurance), 3) Kisan Credit Card, and 4) PM Kisan Maandhan Pension. Shall I tell you more about any of these?",
+  "health": "For healthcare, Ayushman Bharat PM-JAY provides ₹5 lakh/year cover to 50+ crore citizens. Just check your eligibility at pmjay.gov.in. Are you looking for schemes for a specific condition or age group?",
+  "housing": "PM Awas Yojana (Urban & Rural) offers home loans with interest subsidy up to ₹2.67 lakh for EWS/LIG families. Are you in an urban or rural area?",
+  "job": "For employment, MGNREGS guarantees 100 days of work in rural areas. For urban, PM Street Vendor's AtmaNirbhar Nidhi and PMEGP offer startup/working capital loans.",
+  "pension": "NPS (National Pension System) is open to all citizens 18-70 years. For unorganised workers, PM Shram Yogi Maandhan gives ₹3,000/month pension after 60. Which suits your situation?",
+  "women": "For women, key schemes include: Beti Bachao Beti Padhao, PM Ujjwala Yojana (free LPG), Sukanya Samriddhi (girl child savings), and Mahila Shakti Kendra. Which aspect interests you most?"
+};
+function openAIChat() {
+  openModal('ai-modal');
+  const msgs = document.getElementById('chat-messages');
+  if (msgs.children.length === 0) {
+    addChatMsg('bot', "Namaste! 🙏 I'm SevakAI, your guide to government schemes. Tell me about yourself — your age, occupation, state, or what kind of help you're looking for, and I'll find the right schemes for you!");
+  }
+}
+function addChatMsg(type, text) {
+  const msgs = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.style.cssText = `display:flex;align-items:flex-start;gap:8px;${type === 'user' ? 'flex-direction:row-reverse;' : ''}`;
+  div.innerHTML = `
+    <div style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:${type === 'bot' ? 'linear-gradient(135deg,#0A2342,#1a5c9e)' : 'var(--saffron)'};">${type === 'bot' ? '🤖' : '👤'}</div>
+    <div style="max-width:80%;background:${type === 'bot' ? 'var(--card)' : 'var(--saffron)'};color:${type === 'user' ? 'white' : 'var(--text)'};border-radius:${type === 'bot' ? '4px 14px 14px 14px' : '14px 4px 14px 14px'};padding:10px 14px;font-size:0.88rem;line-height:1.6;box-shadow:0 2px 8px rgba(0,0,0,0.08);">${text}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+function sendChat() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  addChatMsg('user', text);
+  input.value = '';
+  setTimeout(() => {
+    const lower = text.toLowerCase();
+    let response = "I can help you find the right scheme! Could you tell me your state, age, and main need? (e.g., education, health, farming, housing, employment)";
+    for (const [key, val] of Object.entries(chatResponses)) {
+      if (lower.includes(key)) { response = val; break; }
+    }
+    addChatMsg('bot', response);
+  }, 700);
+}
+
+// ===== THEME =====
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('theme-icon').textContent = isDark ? 'dark_mode' : 'light_mode';
+  localStorage.setItem('sevak-theme', isDark ? 'light' : 'dark');
+}
+(function() {
+  const saved = localStorage.getItem('sevak-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', saved);
+  const icon = document.getElementById('theme-icon');
+  if (icon) icon.textContent = saved === 'dark' ? 'light_mode' : 'dark_mode';
+})();
+
+// ===== TOAST =====
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ===== NAV HELPERS =====
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobile-menu');
+  const icon = document.getElementById('hamburger-icon');
+  const open = menu.classList.toggle('open');
+  icon.textContent = open ? 'close' : 'menu';
+}
+function closeMobileMenu() {
+  document.getElementById('mobile-menu').classList.remove('open');
+  document.getElementById('hamburger-icon').textContent = 'menu';
+}
+function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+// Nav highlight on scroll
+window.addEventListener('scroll', () => {
+  const links = document.querySelectorAll('.nav-links a');
+  const sections = ['home','about','schemes-section','how-it-works','helpdesk'];
+  let active = 'home';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top < 100) active = id;
+  });
+  links.forEach(l => {
+    l.classList.toggle('active', l.getAttribute('href') === '#' + active);
+  });
+});
+</script>
+</body>
+</html>
